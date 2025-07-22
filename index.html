@@ -18,6 +18,10 @@
             --info: #4895ef;
             --bg: #f0f7ff;
             --topping: #9d4edd;
+            --energy: #f8961e;
+            --sale-good: #90be6d;
+            --sale-normal: #f9c74f;
+            --sale-bad: #f94144;
         }
         
         * {
@@ -35,7 +39,7 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -229,6 +233,14 @@
         
         .btn-topping:hover {
             background: linear-gradient(135deg, #7b2cbf, #5a189a);
+        }
+        
+        .btn-energy {
+            background: linear-gradient(135deg, var(--energy), #f3722c);
+        }
+        
+        .btn-energy:hover {
+            background: linear-gradient(135deg, #f3722c, #f8961e);
         }
         
         .table-container {
@@ -450,6 +462,126 @@
             background: linear-gradient(135deg, var(--topping), #7b2cbf);
         }
         
+        .energy-section {
+            background: rgba(248, 150, 30, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-left: 3px solid var(--energy);
+        }
+        
+        .energy-section .card-title i {
+            background: linear-gradient(135deg, var(--energy), #f3722c);
+        }
+        
+        .sale-analysis {
+            background: rgba(144, 190, 109, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border-left: 5px solid var(--sale-good);
+            transition: all 0.3s ease;
+        }
+        
+        .sale-analysis.normal {
+            border-left-color: var(--sale-normal);
+            background: rgba(249, 199, 79, 0.1);
+        }
+        
+        .sale-analysis.bad {
+            border-left-color: var(--sale-bad);
+            background: rgba(249, 65, 68, 0.1);
+        }
+        
+        .sale-emoji {
+            font-size: 4rem;
+            text-align: center;
+            margin: 1rem 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .sale-emoji:hover {
+            transform: scale(1.2) rotate(5deg);
+        }
+        
+        .sale-status {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding: 10px;
+            border-radius: 12px;
+        }
+        
+        .good-sale {
+            color: var(--sale-good);
+            background: rgba(144, 190, 109, 0.15);
+        }
+        
+        .normal-sale {
+            color: var(--sale-normal);
+            background: rgba(249, 199, 79, 0.15);
+        }
+        
+        .bad-sale {
+            color: var(--sale-bad);
+            background: rgba(249, 65, 68, 0.15);
+        }
+        
+        .purchase-log {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .log-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+        
+        .log-item:hover {
+            background: #f9f9ff;
+        }
+        
+        .log-item:last-child {
+            border-bottom: none;
+        }
+        
+        .log-date {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .log-detail {
+            flex-grow: 1;
+            padding: 0 20px;
+        }
+        
+        .log-cost {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .log-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .log-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #6c757d;
+        }
+        
         @media (max-width: 768px) {
             .product-grid {
                 grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -472,6 +604,14 @@
             th, td {
                 padding: 12px 15px;
             }
+            
+            .sale-emoji {
+                font-size: 3rem;
+            }
+            
+            .sale-status {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -482,83 +622,22 @@
                 <i class="fas fa-calculator"></i>
             </div>
             <h1>Kalkulator HPP UMKM Lengkap</h1>
-            <p class="subtitle">Hitung Harga Pokok Penjualan (HPP) per pcs dengan akurat untuk berbagai usaha UMKM, termasuk perhitungan topping dan glaze</p>
+            <p class="subtitle">Hitung Harga Pokok Penjualan (HPP) per pcs dengan akurat untuk berbagai usaha UMKM, termasuk perhitungan bahan dasar, topping, dan biaya operasional</p>
         </div>
     </header>
     
     <div class="container">
         <div class="card">
-            <h2 class="card-title"><i class="fas fa-utensils"></i> Pilih Jenis Produk</h2>
-            <p>Pilih salah satu produk UMKM untuk memulai perhitungan:</p>
-            
-            <div class="product-grid">
-                <div class="product-card active" data-product="custom">
-                    <div class="product-icon">
-                        <i class="fas fa-plus-circle"></i>
-                    </div>
-                    <div>Produk Custom</div>
-                </div>
-                <div class="product-card" data-product="es-lilin">
-                    <div class="product-icon">
-                        <i class="fas fa-ice-cream"></i>
-                    </div>
-                    <div>Es Lilin</div>
-                </div>
-                <div class="product-card" data-product="donat">
-                    <div class="product-icon">
-                        <i class="fas fa-donate"></i>
-                    </div>
-                    <div>Donat</div>
-                </div>
-                <div class="product-card" data-product="martabak">
-                    <div class="product-icon">
-                        <i class="fas fa-bread-slice"></i>
-                    </div>
-                    <div>Martabak Mini</div>
-                </div>
-                <div class="product-card" data-product="nasi-kucing">
-                    <div class="product-icon">
-                        <i class="fas fa-utensil-spoon"></i>
-                    </div>
-                    <div>Nasi Kucing</div>
-                </div>
-                <div class="product-card" data-product="keripik">
-                    <div class="product-icon">
-                        <i class="fas fa-cookie"></i>
-                    </div>
-                    <div>Keripik</div>
-                </div>
-                <div class="product-card" data-product="kue">
-                    <div class="product-icon">
-                        <i class="fas fa-birthday-cake"></i>
-                    </div>
-                    <div>Kue & Roti</div>
-                </div>
-                <div class="product-card" data-product="minuman">
-                    <div class="product-icon">
-                        <i class="fas fa-coffee"></i>
-                    </div>
-                    <div>Minuman</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="card">
-            <h2 class="card-title"><i class="fas fa-info-circle"></i> Informasi Produk</h2>
+            <h2 class="card-title"><i class="fas fa-utensils"></i> Informasi Produk</h2>
             
             <div class="form-group">
                 <label for="product-name">Nama Produk</label>
-                <input type="text" id="product-name" placeholder="Contoh: Es Lilin Coklat Premium" value="Produk Saya">
+                <input type="text" id="product-name" placeholder="Contoh: Es Lilin Coklat Premium" value="Es Lilin Premium">
             </div>
             
             <div class="form-group">
                 <label for="product-quantity">Jumlah Produk yang Dihasilkan (pcs)</label>
-                <input type="number" id="product-quantity" min="1" value="150">
-            </div>
-            
-            <div class="form-group">
-                <label for="product-desc">Deskripsi Produk (Opsional)</label>
-                <textarea id="product-desc" rows="2" placeholder="Deskripsi singkat produk..."></textarea>
+                <input type="number" id="product-quantity" min="1" value="64">
             </div>
         </div>
         
@@ -571,49 +650,34 @@
                     <thead>
                         <tr>
                             <th>Nama Bahan</th>
-                            <th>Jumlah</th>
-                            <th>Satuan</th>
-                            <th>Harga</th>
-                            <th>Pemakaian Efektif (%)</th>
-                            <th>Biaya Efektif</th>
+                            <th>Harga Beli</th>
+                            <th>Satuan Besar</th>
+                            <th>Isi Satuan Kecil</th>
+                            <th>Satuan Kecil</th>
+                            <th>Terpakai</th>
+                            <th>Biaya</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><input type="text" class="material-name" placeholder="Tepung terigu" value="Tepung terigu"></td>
-                            <td><input type="number" class="material-qty" min="0" step="0.1" value="2"></td>
-                            <td>
-                                <select class="material-unit">
-                                    <option value="kg">kg</option>
-                                    <option value="gram">gram</option>
-                                    <option value="liter">liter</option>
-                                    <option value="ml">ml</option>
-                                    <option value="pcs">pcs</option>
-                                    <option value="bungkus">bungkus</option>
-                                </select>
-                            </td>
-                            <td><input type="number" class="material-price" min="0" value="15000"></td>
-                            <td><input type="number" class="material-usage" min="0" max="100" value="100">%</td>
-                            <td class="material-cost">Rp 30.000</td>
+                            <td><input type="text" class="material-name" placeholder="Air Mineral" value="Air Mineral"></td>
+                            <td><input type="number" class="material-price" min="0" value="22000"></td>
+                            <td><input type="text" class="material-unit" placeholder="Botol" value="Botol"></td>
+                            <td><input type="number" class="material-content" min="0" step="0.01" value="15000"></td>
+                            <td><input type="text" class="material-unit-small" placeholder="ml" value="ml"></td>
+                            <td><input type="number" class="material-qty-used" min="0" step="0.01" value="2000"></td>
+                            <td class="material-cost">Rp 2.933</td>
                             <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
                         </tr>
                         <tr>
-                            <td><input type="text" class="material-name" placeholder="Gula pasir" value="Gula pasir"></td>
-                            <td><input type="number" class="material-qty" min="0" step="0.1" value="1"></td>
-                            <td>
-                                <select class="material-unit">
-                                    <option value="kg">kg</option>
-                                    <option value="gram">gram</option>
-                                    <option value="liter" selected>liter</option>
-                                    <option value="ml">ml</option>
-                                    <option value="pcs">pcs</option>
-                                    <option value="bungkus">bungkus</option>
-                                </select>
-                            </td>
-                            <td><input type="number" class="material-price" min="0" value="12000"></td>
-                            <td><input type="number" class="material-usage" min="0" max="100" value="100">%</td>
-                            <td class="material-cost">Rp 12.000</td>
+                            <td><input type="text" class="material-name" placeholder="Tepung terigu" value="Tepung terigu"></td>
+                            <td><input type="number" class="material-price" min="0" value="15000"></td>
+                            <td><input type="text" class="material-unit" placeholder="Sak" value="Sak"></td>
+                            <td><input type="number" class="material-content" min="0" step="0.01" value="1000"></td>
+                            <td><input type="text" class="material-unit-small" placeholder="gram" value="gram"></td>
+                            <td><input type="number" class="material-qty-used" min="0" step="0.01" value="500"></td>
+                            <td class="material-cost">Rp 7.500</td>
                             <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
                         </tr>
                     </tbody>
@@ -625,29 +689,31 @@
         
         <div class="topping-section">
             <h2 class="card-title"><i class="fas fa-candy-cane"></i> Topping & Glaze</h2>
-            <p>Masukkan topping, glaze, atau bahan tambahan per pcs:</p>
+            <p>Masukkan topping, glaze, atau bahan tambahan:</p>
             
             <div class="table-container">
                 <table id="toppings-table">
                     <thead>
                         <tr>
                             <th>Nama Topping/Glaze</th>
-                            <th>Biaya per Pcs</th>
-                            <th>Deskripsi</th>
+                            <th>Harga Beli</th>
+                            <th>Satuan Besar</th>
+                            <th>Isi Satuan Kecil</th>
+                            <th>Satuan Kecil</th>
+                            <th>Terpakai</th>
+                            <th>Biaya</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><input type="text" class="topping-name" placeholder="Coklat leleh" value="Coklat leleh"></td>
-                            <td><input type="number" class="topping-cost" min="0" value="500"></td>
-                            <td><input type="text" class="topping-desc" placeholder="Opsional" value="Glaze coklat premium"></td>
-                            <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td><input type="text" class="topping-name" placeholder="Keju parut" value="Keju parut"></td>
-                            <td><input type="number" class="topping-cost" min="0" value="300"></td>
-                            <td><input type="text" class="topping-desc" placeholder="Opsional" value="Topping keju"></td>
+                            <td><input type="text" class="topping-name" placeholder="Glaze Coklat" value="Glaze Coklat"></td>
+                            <td><input type="number" class="topping-price" min="0" value="4800"></td>
+                            <td><input type="text" class="topping-unit" placeholder="Bungkus" value="Bungkus"></td>
+                            <td><input type="number" class="topping-content" min="0" step="0.01" value="118"></td>
+                            <td><input type="text" class="topping-unit-small" placeholder="gram" value="gram"></td>
+                            <td><input type="number" class="topping-qty-used" min="0" step="0.01" value="7"></td>
+                            <td class="topping-cost">Rp 284,76</td>
                             <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
                         </tr>
                     </tbody>
@@ -655,6 +721,72 @@
             </div>
             
             <button id="add-topping" class="btn btn-topping"><i class="fas fa-plus"></i> Tambah Topping</button>
+        </div>
+        
+        <div class="energy-section">
+            <h2 class="card-title"><i class="fas fa-bolt"></i> Biaya Energi & Operasional</h2>
+            <p>Masukkan biaya listrik, gas, dan operasional lainnya:</p>
+            
+            <div class="table-container">
+                <table id="energy-table">
+                    <thead>
+                        <tr>
+                            <th>Jenis Biaya</th>
+                            <th>Harga</th>
+                            <th>Satuan</th>
+                            <th>Pemakaian</th>
+                            <th>Biaya</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <select class="energy-type">
+                                    <option value="listrik">Listrik</option>
+                                    <option value="gas">Gas</option>
+                                    <option value="jasa">Jasa</option>
+                                    <option value="lainnya">Lainnya</option>
+                                </select>
+                            </td>
+                            <td><input type="number" class="energy-price" min="0" value="1500"></td>
+                            <td>
+                                <select class="energy-unit">
+                                    <option value="kwh">kWh</option>
+                                    <option value="jam">Jam</option>
+                                    <option value="tabung">Tabung</option>
+                                </select>
+                            </td>
+                            <td><input type="number" class="energy-usage" min="0" step="0.01" value="3"></td>
+                            <td class="energy-cost">Rp 4.500</td>
+                            <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select class="energy-type">
+                                    <option value="gas">Gas</option>
+                                    <option value="listrik">Listrik</option>
+                                    <option value="jasa">Jasa</option>
+                                    <option value="lainnya">Lainnya</option>
+                                </select>
+                            </td>
+                            <td><input type="number" class="energy-price" min="0" value="20000"></td>
+                            <td>
+                                <select class="energy-unit">
+                                    <option value="tabung">Tabung</option>
+                                    <option value="kwh">kWh</option>
+                                    <option value="jam">Jam</option>
+                                </select>
+                            </td>
+                            <td><input type="number" class="energy-usage" min="0" step="0.01" value="0.5"></td>
+                            <td class="energy-cost">Rp 10.000</td>
+                            <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <button id="add-energy" class="btn btn-energy"><i class="fas fa-plus"></i> Tambah Biaya</button>
         </div>
         
         <div class="card">
@@ -688,20 +820,6 @@
                             <td class="effective-cost">Rp 50.000</td>
                             <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
                         </tr>
-                        <tr>
-                            <td><input type="text" class="cost-desc" placeholder="Biaya kemasan" value="Biaya kemasan"></td>
-                            <td><input type="number" class="cost-qty" min="1" value="150"></td>
-                            <td><input type="number" class="cost-amount" min="0" value="100"></td>
-                            <td>
-                                <select class="cost-period">
-                                    <option value="batch">Per Batch</option>
-                                    <option value="hour">Per Jam</option>
-                                    <option value="day" selected>Per Hari</option>
-                                </select>
-                            </td>
-                            <td class="effective-cost">Rp 15.000</td>
-                            <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -712,8 +830,8 @@
         <div class="result-card">
             <h2 class="card-title"><i class="fas fa-file-invoice-dollar"></i> Hasil Perhitungan HPP</h2>
             <div class="result-label">HPP per pcs</div>
-            <div class="result-value" id="hpp-result">Rp 1.000</div>
-            <div class="result-label" id="product-summary">Untuk 150 pcs Produk Saya</div>
+            <div class="result-value" id="hpp-result">Rp 1.200</div>
+            <div class="result-label" id="product-summary">Untuk 64 pcs Es Lilin Premium</div>
             
             <button id="calculate-btn" class="btn btn-success">
                 <i class="fas fa-calculator"></i> Hitung Ulang HPP
@@ -724,47 +842,113 @@
             <h3>Rincian Biaya Produksi</h3>
             <div class="cost-item">
                 <span>Total Biaya Bahan Baku:</span>
-                <span id="total-materials">Rp 42.000</span>
+                <span id="total-materials">Rp 10.433</span>
             </div>
             <div class="cost-item">
                 <span>Total Biaya Topping/Glaze:</span>
-                <span id="total-toppings">Rp 120.000</span>
+                <span id="total-toppings">Rp 284,76</span>
+            </div>
+            <div class="cost-item">
+                <span>Total Biaya Energi & Operasional:</span>
+                <span id="total-energy">Rp 14.500</span>
             </div>
             <div class="cost-item">
                 <span>Total Biaya Lainnya:</span>
-                <span id="total-other-costs">Rp 65.000</span>
+                <span id="total-other-costs">Rp 50.000</span>
             </div>
             <div class="cost-item total">
                 <span>Total Biaya Produksi:</span>
-                <span id="total-production-cost">Rp 227.000</span>
+                <span id="total-production-cost">Rp 75.217,76</span>
             </div>
         </div>
         
-        <div class="explanation">
-            <h3><i class="fas fa-lightbulb"></i> Pentingnya Perhitungan HPP untuk UMKM</h3>
-            <p><span class="highlight">Harga Pokok Penjualan (HPP)</span> adalah total biaya yang dikeluarkan untuk menghasilkan suatu produk, termasuk biaya bahan baku, tenaga kerja, dan biaya produksi lainnya.</p>
+        <div class="sale-analysis" id="sale-analysis">
+            <h2 class="card-title"><i class="fas fa-chart-line"></i> Analisis Penjualan</h2>
             
-            <p><strong>Rumus HPP per pcs:</strong></p>
-            <p style="background: #f0f7ff; padding: 15px; border-radius: 12px; font-weight: 500;">
-                HPP = (Total Biaya Bahan Baku + Total Biaya Topping/Glaze + Total Biaya Lainnya) / Jumlah Produk yang Dihasilkan
-            </p>
+            <div class="form-group">
+                <label for="selling-price">Harga Jual per Pcs (Rp)</label>
+                <input type="number" id="selling-price" min="0" value="1500">
+            </div>
             
-            <p><strong>Manfaat perhitungan HPP yang akurat:</strong></p>
-            <ul style="margin-left: 20px; margin-top: 15px;">
-                <li>Menentukan harga jual yang tepat untuk mendapatkan keuntungan</li>
-                <li>Mengidentifikasi biaya produksi yang dapat dioptimalkan</li>
-                <li>Membantu pengambilan keputusan bisnis yang lebih baik</li>
-                <li>Meningkatkan efisiensi produksi</li>
-                <li>Memantau kesehatan keuangan usaha</li>
-            </ul>
+            <div class="form-group">
+                <label for="sold-quantity">Kuantitas Terjual</label>
+                <input type="number" id="sold-quantity" min="0" value="60">
+            </div>
             
-            <p style="margin-top: 20px;"><strong>Tips untuk UMKM:</strong> Selalu hitung HPP setiap kali ada perubahan harga bahan baku atau penambahan produk baru. Gunakan kalkulator ini untuk mendapatkan hasil yang akurat!</p>
+            <button id="analyze-sale" class="btn"><i class="fas fa-chart-pie"></i> Analisis Penjualan</button>
+            
+            <div class="sale-emoji" id="sale-emoji">😊</div>
+            <div class="sale-status good-sale" id="sale-status">Berhasil! Laku Keras 🚀</div>
+            
+            <div class="cost-breakdown">
+                <div class="cost-item">
+                    <span>Total Pendapatan:</span>
+                    <span id="total-revenue">Rp 90.000</span>
+                </div>
+                <div class="cost-item">
+                    <span>Total Biaya Produksi:</span>
+                    <span id="sale-production-cost">Rp 75.217,76</span>
+                </div>
+                <div class="cost-item">
+                    <span>Keuntungan:</span>
+                    <span id="total-profit">Rp 14.782,24</span>
+                </div>
+                <div class="cost-item total">
+                    <span>Margin Keuntungan:</span>
+                    <span id="profit-margin">16,42%</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="purchase-log">
+            <h2 class="card-title"><i class="fas fa-clipboard-list"></i> Log Pembelian Bahan Baku</h2>
+            
+            <div class="log-item">
+                <div class="log-date">21 Jul 2023</div>
+                <div class="log-detail">
+                    <div>Air Mineral - 1 Botol (15.000 ml)</div>
+                    <div class="log-desc">Digunakan: 2.000 ml</div>
+                </div>
+                <div class="log-cost">Rp 22.000</div>
+                <div class="log-actions">
+                    <button title="Edit"><i class="fas fa-edit"></i></button>
+                    <button title="Hapus"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            
+            <div class="log-item">
+                <div class="log-date">20 Jul 2023</div>
+                <div class="log-detail">
+                    <div>Glaze Coklat - 1 Bungkus (118 gram)</div>
+                    <div class="log-desc">Digunakan: 7 gram</div>
+                </div>
+                <div class="log-cost">Rp 4.800</div>
+                <div class="log-actions">
+                    <button title="Edit"><i class="fas fa-edit"></i></button>
+                    <button title="Hapus"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            
+            <div class="log-item">
+                <div class="log-date">19 Jul 2023</div>
+                <div class="log-detail">
+                    <div>Tepung Terigu - 1 Sak (1.000 gram)</div>
+                    <div class="log-desc">Digunakan: 500 gram</div>
+                </div>
+                <div class="log-cost">Rp 15.000</div>
+                <div class="log-actions">
+                    <button title="Edit"><i class="fas fa-edit"></i></button>
+                    <button title="Hapus"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            
+            <button id="add-log" class="btn" style="margin-top: 20px;"><i class="fas fa-plus"></i> Tambah Pembelian</button>
         </div>
     </div>
     
     <footer>
         <div class="container">
-            <p>Kalkulator HPP UMKM &copy; 2025 - Alat Akurat untuk Menghitung Biaya Produksi Dasar</p>
+            <p>Kalkulator HPP UMKM Lengkap &copy; 2023 - Alat Akurat untuk Menghitung Biaya Produksi</p>
         </div>
     </footer>
 
@@ -778,23 +962,52 @@
             }).format(angka);
         }
         
-        // Fungsi untuk menghitung biaya bahan
-        function calculateMaterialCost(row) {
-            const qty = parseFloat(row.querySelector('.material-qty').value) || 0;
-            const price = parseFloat(row.querySelector('.material-price').value) || 0;
-            const usage = parseFloat(row.querySelector('.material-usage').value) || 100;
-            
-            // Hitung biaya efektif dengan mempertimbangkan pemakaian efektif
-            const effectiveCost = (qty * price) / (usage / 100);
-            row.querySelector('.material-cost').textContent = formatRupiah(effectiveCost);
-            
-            return effectiveCost;
+        // Fungsi untuk format angka dengan koma
+        function formatNumber(num) {
+            return num.toLocaleString('id-ID', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
         }
         
-        // Fungsi untuk menghitung biaya topping per pcs
+        // Fungsi untuk menghitung biaya bahan
+        function calculateMaterialCost(row) {
+            const price = parseFloat(row.querySelector('.material-price').value) || 0;
+            const content = parseFloat(row.querySelector('.material-content').value) || 1;
+            const qtyUsed = parseFloat(row.querySelector('.material-qty-used').value) || 0;
+            
+            // Hitung biaya efektif
+            const unitPrice = price / content;
+            const cost = unitPrice * qtyUsed;
+            row.querySelector('.material-cost').textContent = formatRupiah(cost);
+            
+            return cost;
+        }
+        
+        // Fungsi untuk menghitung biaya topping
         function calculateToppingCost(row) {
-            const costPerPcs = parseFloat(row.querySelector('.topping-cost').value) || 0;
-            return costPerPcs;
+            const price = parseFloat(row.querySelector('.topping-price').value) || 0;
+            const content = parseFloat(row.querySelector('.topping-content').value) || 1;
+            const qtyUsed = parseFloat(row.querySelector('.topping-qty-used').value) || 0;
+            
+            // Hitung biaya efektif
+            const unitPrice = price / content;
+            const cost = unitPrice * qtyUsed;
+            row.querySelector('.topping-cost').textContent = formatRupiah(cost);
+            
+            return cost;
+        }
+        
+        // Fungsi untuk menghitung biaya energi
+        function calculateEnergyCost(row) {
+            const price = parseFloat(row.querySelector('.energy-price').value) || 0;
+            const usage = parseFloat(row.querySelector('.energy-usage').value) || 0;
+            
+            // Hitung biaya efektif
+            const cost = price * usage;
+            row.querySelector('.energy-cost').textContent = formatRupiah(cost);
+            
+            return cost;
         }
         
         // Fungsi untuk menghitung biaya lainnya
@@ -817,11 +1030,14 @@
             
             // Hitung total biaya topping/glaze
             let totalToppingCost = 0;
-            const productQty = parseFloat(document.getElementById('product-quantity').value) || 1;
-            
             document.querySelectorAll('#toppings-table tbody tr').forEach(row => {
-                const toppingPerPcs = calculateToppingCost(row);
-                totalToppingCost += toppingPerPcs * productQty;
+                totalToppingCost += calculateToppingCost(row);
+            });
+            
+            // Hitung total biaya energi
+            let totalEnergyCost = 0;
+            document.querySelectorAll('#energy-table tbody tr').forEach(row => {
+                totalEnergyCost += calculateEnergyCost(row);
             });
             
             // Hitung total biaya lainnya
@@ -830,8 +1046,11 @@
                 totalOtherCost += calculateOtherCost(row);
             });
             
+            // Ambil jumlah produk
+            const productQty = parseFloat(document.getElementById('product-quantity').value) || 1;
+            
             // Hitung HPP per pcs
-            const totalCost = totalMaterialCost + totalToppingCost + totalOtherCost;
+            const totalCost = totalMaterialCost + totalToppingCost + totalEnergyCost + totalOtherCost;
             const hppPerPcs = totalCost / productQty;
             
             // Tampilkan hasil
@@ -845,8 +1064,55 @@
             // Tampilkan rincian biaya
             document.getElementById('total-materials').textContent = formatRupiah(totalMaterialCost);
             document.getElementById('total-toppings').textContent = formatRupiah(totalToppingCost);
+            document.getElementById('total-energy').textContent = formatRupiah(totalEnergyCost);
             document.getElementById('total-other-costs').textContent = formatRupiah(totalOtherCost);
             document.getElementById('total-production-cost').textContent = formatRupiah(totalCost);
+            
+            return {hppPerPcs, totalCost};
+        }
+        
+        // Fungsi untuk analisis penjualan
+        function analyzeSale() {
+            const result = calculateHPP();
+            const hppPerPcs = result.hppPerPcs;
+            const totalProductionCost = result.totalCost;
+            
+            const sellingPrice = parseFloat(document.getElementById('selling-price').value) || 0;
+            const soldQty = parseFloat(document.getElementById('sold-quantity').value) || 0;
+            
+            // Hitung hasil penjualan
+            const totalRevenue = sellingPrice * soldQty;
+            const totalCost = hppPerPcs * soldQty;
+            const profit = totalRevenue - totalCost;
+            const profitMargin = totalRevenue > 0 ? (profit / totalRevenue) * 100 : 0;
+            
+            // Tampilkan hasil
+            document.getElementById('total-revenue').textContent = formatRupiah(totalRevenue);
+            document.getElementById('sale-production-cost').textContent = formatRupiah(totalCost);
+            document.getElementById('total-profit').textContent = formatRupiah(profit);
+            document.getElementById('profit-margin').textContent = `${profitMargin.toFixed(2)}%`;
+            
+            // Tentukan status penjualan
+            const saleAnalysis = document.getElementById('sale-analysis');
+            const saleEmoji = document.getElementById('sale-emoji');
+            const saleStatus = document.getElementById('sale-status');
+            
+            if (profitMargin > 30) {
+                saleAnalysis.className = 'sale-analysis';
+                saleEmoji.innerHTML = '🚀😍✨';
+                saleStatus.className = 'sale-status good-sale';
+                saleStatus.textContent = 'Berhasil! Laku Keras 🚀';
+            } else if (profitMargin >= 15) {
+                saleAnalysis.className = 'sale-analysis normal';
+                saleEmoji.innerHTML = '😊👍📈';
+                saleStatus.className = 'sale-status normal-sale';
+                saleStatus.textContent = 'Biasa. Laku Standar 📊';
+            } else {
+                saleAnalysis.className = 'sale-analysis bad';
+                saleEmoji.innerHTML = '😞💔⚠️';
+                saleStatus.className = 'sale-status bad-sale';
+                saleStatus.textContent = 'Bad Sale! Perlu Evaluasi ⚠️';
+            }
         }
         
         // Tambah baris bahan baku
@@ -856,26 +1122,16 @@
             
             newRow.innerHTML = `
                 <td><input type="text" class="material-name" placeholder="Nama bahan"></td>
-                <td><input type="number" class="material-qty" min="0" step="0.1" value="1"></td>
-                <td>
-                    <select class="material-unit">
-                        <option value="kg">kg</option>
-                        <option value="gram">gram</option>
-                        <option value="liter">liter</option>
-                        <option value="ml">ml</option>
-                        <option value="pcs">pcs</option>
-                        <option value="bungkus">bungkus</option>
-                    </select>
-                </td>
                 <td><input type="number" class="material-price" min="0" value="0"></td>
-                <td><input type="number" class="material-usage" min="0" max="100" value="100">%</td>
+                <td><input type="text" class="material-unit" placeholder="Satuan besar"></td>
+                <td><input type="number" class="material-content" min="0" step="0.01" value="0"></td>
+                <td><input type="text" class="material-unit-small" placeholder="Satuan kecil"></td>
+                <td><input type="number" class="material-qty-used" min="0" step="0.01" value="0"></td>
                 <td class="material-cost">Rp 0</td>
                 <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
             `;
             
             tbody.appendChild(newRow);
-            
-            // Tambahkan event listener untuk input di baris baru
             addInputListeners(newRow);
         });
         
@@ -886,14 +1142,47 @@
             
             newRow.innerHTML = `
                 <td><input type="text" class="topping-name" placeholder="Nama topping"></td>
-                <td><input type="number" class="topping-cost" min="0" value="0"></td>
-                <td><input type="text" class="topping-desc" placeholder="Opsional"></td>
+                <td><input type="number" class="topping-price" min="0" value="0"></td>
+                <td><input type="text" class="topping-unit" placeholder="Satuan besar"></td>
+                <td><input type="number" class="topping-content" min="0" step="0.01" value="0"></td>
+                <td><input type="text" class="topping-unit-small" placeholder="Satuan kecil"></td>
+                <td><input type="number" class="topping-qty-used" min="0" step="0.01" value="0"></td>
+                <td class="topping-cost">Rp 0</td>
                 <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
             `;
             
             tbody.appendChild(newRow);
+            addInputListeners(newRow);
+        });
+        
+        // Tambah baris energi
+        document.getElementById('add-energy').addEventListener('click', function() {
+            const tbody = document.querySelector('#energy-table tbody');
+            const newRow = document.createElement('tr');
             
-            // Tambahkan event listener untuk input di baris baru
+            newRow.innerHTML = `
+                <td>
+                    <select class="energy-type">
+                        <option value="listrik">Listrik</option>
+                        <option value="gas">Gas</option>
+                        <option value="jasa">Jasa</option>
+                        <option value="lainnya">Lainnya</option>
+                    </select>
+                </td>
+                <td><input type="number" class="energy-price" min="0" value="0"></td>
+                <td>
+                    <select class="energy-unit">
+                        <option value="kwh">kWh</option>
+                        <option value="jam">Jam</option>
+                        <option value="tabung">Tabung</option>
+                    </select>
+                </td>
+                <td><input type="number" class="energy-usage" min="0" step="0.01" value="0"></td>
+                <td class="energy-cost">Rp 0</td>
+                <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
+            `;
+            
+            tbody.appendChild(newRow);
             addInputListeners(newRow);
         });
         
@@ -918,59 +1207,84 @@
             `;
             
             tbody.appendChild(newRow);
-            
-            // Tambahkan event listener untuk input di baris baru
             addInputListeners(newRow);
+        });
+        
+        // Tambah log pembelian
+        document.getElementById('add-log').addEventListener('click', function() {
+            const logContainer = document.querySelector('.purchase-log');
+            const logItem = document.createElement('div');
+            logItem.className = 'log-item';
+            
+            // Tanggal sekarang
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('id-ID', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            });
+            
+            logItem.innerHTML = `
+                <div class="log-date">${dateStr}</div>
+                <div class="log-detail">
+                    <div>Pembelian Baru</div>
+                    <div class="log-desc">Digunakan: 0</div>
+                </div>
+                <div class="log-cost">Rp 0</div>
+                <div class="log-actions">
+                    <button title="Edit"><i class="fas fa-edit"></i></button>
+                    <button title="Hapus"><i class="fas fa-trash"></i></button>
+                </div>
+            `;
+            
+            logContainer.insertBefore(logItem, document.getElementById('add-log'));
         });
         
         // Fungsi untuk menambahkan event listener ke input
         function addInputListeners(row) {
             // Untuk bahan baku
-            const materialQty = row.querySelector('.material-qty');
-            const materialPrice = row.querySelector('.material-price');
-            const materialUsage = row.querySelector('.material-usage');
-            
-            if (materialQty) {
-                materialQty.addEventListener('input', () => {
-                    calculateMaterialCost(row);
-                    calculateHPP();
+            const materialInputs = row.querySelectorAll('.material-price, .material-content, .material-qty-used');
+            materialInputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    if (row.closest('#materials-table')) {
+                        calculateMaterialCost(row);
+                        calculateHPP();
+                    }
                 });
-            }
-            if (materialPrice) {
-                materialPrice.addEventListener('input', () => {
-                    calculateMaterialCost(row);
-                    calculateHPP();
-                });
-            }
-            if (materialUsage) {
-                materialUsage.addEventListener('input', () => {
-                    calculateMaterialCost(row);
-                    calculateHPP();
-                });
-            }
+            });
             
             // Untuk topping
-            const toppingCost = row.querySelector('.topping-cost');
-            if (toppingCost) {
-                toppingCost.addEventListener('input', calculateHPP);
-            }
+            const toppingInputs = row.querySelectorAll('.topping-price, .topping-content, .topping-qty-used');
+            toppingInputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    if (row.closest('#toppings-table')) {
+                        calculateToppingCost(row);
+                        calculateHPP();
+                    }
+                });
+            });
+            
+            // Untuk energi
+            const energyInputs = row.querySelectorAll('.energy-price, .energy-usage');
+            energyInputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    if (row.closest('#energy-table')) {
+                        calculateEnergyCost(row);
+                        calculateHPP();
+                    }
+                });
+            });
             
             // Untuk biaya lainnya
-            const costQty = row.querySelector('.cost-qty');
-            const costAmount = row.querySelector('.cost-amount');
-            
-            if (costQty) {
-                costQty.addEventListener('input', () => {
-                    calculateOtherCost(row);
-                    calculateHPP();
+            const costInputs = row.querySelectorAll('.cost-qty, .cost-amount');
+            costInputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    if (row.closest('#costs-table')) {
+                        calculateOtherCost(row);
+                        calculateHPP();
+                    }
                 });
-            }
-            if (costAmount) {
-                costAmount.addEventListener('input', () => {
-                    calculateOtherCost(row);
-                    calculateHPP();
-                });
-            }
+            });
         }
         
         // Event delegation untuk menghapus baris
@@ -987,46 +1301,16 @@
         // Event listener untuk tombol hitung
         document.getElementById('calculate-btn').addEventListener('click', calculateHPP);
         
+        // Event listener untuk analisis penjualan
+        document.getElementById('analyze-sale').addEventListener('click', analyzeSale);
+        
         // Event listener untuk input yang mempengaruhi perhitungan
         document.getElementById('product-quantity').addEventListener('input', calculateHPP);
         document.getElementById('product-name').addEventListener('input', calculateHPP);
         
-        // Pilih produk UMKM
-        document.querySelectorAll('.product-card').forEach(card => {
-            card.addEventListener('click', function() {
-                document.querySelectorAll('.product-card').forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-                
-                const product = this.getAttribute('data-product');
-                // Di sini bisa ditambahkan logika untuk mengisi form otomatis berdasarkan produk
-                switch(product) {
-                    case 'es-lilin':
-                        document.getElementById('product-name').value = 'Es Lilin Premium';
-                        break;
-                    case 'donat':
-                        document.getElementById('product-name').value = 'Donat Jumbo';
-                        break;
-                    case 'martabak':
-                        document.getElementById('product-name').value = 'Martabak Mini';
-                        break;
-                    case 'nasi-kucing':
-                        document.getElementById('product-name').value = 'Nasi Kucing Special';
-                        break;
-                    case 'keripik':
-                        document.getElementById('product-name').value = 'Keripik Singkong Pedas';
-                        break;
-                    case 'kue':
-                        document.getElementById('product-name').value = 'Kue Brownies';
-                        break;
-                    case 'minuman':
-                        document.getElementById('product-name').value = 'Minuman Segar';
-                        break;
-                    default:
-                        document.getElementById('product-name').value = 'Produk Saya';
-                }
-                calculateHPP();
-            });
-        });
+        // Event listener untuk input analisis penjualan
+        document.getElementById('selling-price').addEventListener('input', analyzeSale);
+        document.getElementById('sold-quantity').addEventListener('input', analyzeSale);
         
         // Inisialisasi event listener untuk baris awal
         document.querySelectorAll('table tbody tr').forEach(row => {
@@ -1035,6 +1319,7 @@
         
         // Hitung HPP awal
         calculateHPP();
+        analyzeSale();
     </script>
 </body>
 </html>
