@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator HPP UMKM Lengkap</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --danger: #e63946;
+            --warning: #ff9e00;
+            --info: #4895ef;
+            --bg: #f0f7ff;
+            --topping: #9d4edd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f7ff, #e2e9ff);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary);
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-title {
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+        
+        .card-title i {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+        
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 1.05rem;
+        }
+        
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            background: #fafbff;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.15);
+            background: white;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, var(--secondary), #2a2a8a);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-block {
+            display: flex;
+            width: 100%;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #c1121f);
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c1121f, #9a031e);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #00b4d8);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(135deg, #00b4d8, #0077b6);
+        }
+        
+        .btn-topping {
+            background: linear-gradient(135deg, var(--topping), #7b2cbf);
+        }
+        
+        .btn-topping:hover {
+            background: linear-gradient(135deg, #7b2cbf, #5a189a);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+        
+        th, td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: #f5f7ff;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        tr:hover {
+            background: #fafbff;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: color 0.3s ease;
+            padding: 8px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .action-btn:hover {
+            background: rgba(230, 57, 70, 0.1);
+            color: #c1121f;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, var(--success), var(--info));
+            color: white;
+            text-align: center;
+            padding: 2.5rem;
+            border-radius: 20px;
+        }
+        
+        .result-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 1.5rem 0;
+            text-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .result-label {
+            font-size: 1.3rem;
+            opacity: 0.95;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 20px;
+            margin-top: 1.5rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .product-card.active {
+            border-color: var(--primary);
+            background: #eef2ff;
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.2);
+        }
+        
+        .product-card.active::before {
+            background: var(--secondary);
+        }
+        
+        .product-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .product-card.active .product-icon {
+            transform: scale(1.1);
+            color: var(--secondary);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2.5rem 0;
+            color: #6c757d;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .explanation {
+            background: linear-gradient(to right, #eef2ff, #f0f7ff);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-top: 2.5rem;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .explanation h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .explanation h3 i {
+            background: var(--primary);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cost-breakdown {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .cost-item:last-child {
+            border-bottom: none;
+        }
+        
+        .cost-item.total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+        }
+        
+        .highlight {
+            background: linear-gradient(to right, #4cc9f0, #4895ef);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-weight: 500;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        
+        .topping-section {
+            background: rgba(157, 78, 221, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-left: 3px solid var(--topping);
+        }
+        
+        .topping-section .card-title i {
+            background: linear-gradient(135deg, var(--topping), #7b2cbf);
+        }
+        
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                gap: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+                padding: 0 15px;
+            }
+            
+            .result-value {
+                font-size: 2.8rem;
+            }
+            
+            th, td {
+                padding: 12px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-calculator"></i>
+            </div>
+            <h1>Kalkulator HPP UMKM Lengkap</h1>
+            <p class="subtitle">Hitung Harga Pokok Penjualan (HPP) per pcs dengan akurat untuk berbagai usaha UMKM, termasuk perhitungan topping dan glaze</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-utensils"></i> Pilih Jenis Produk</h2>
+            <p>Pilih salah satu produk UMKM untuk memulai perhitungan:</p>
+            
+            <div class="product-grid">
+                <div class="product-card active" data-product="custom">
+                    <div class="product-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <div>Produk Custom</div>
+                </div>
+                <div class="product-card" data-product="es-lilin">
+                    <div class="product-icon">
+                        <i class="fas fa-ice-cream"></i>
+                    </div>
+                    <div>Es Lilin</div>
+                </div>
+                <div class="product-card" data-product="donat">
+                    <div class="product-icon">
+                        <i class="fas fa-donate"></i>
+                    </div>
+                    <div>Donat</div>
+                </div>
+                <div class="product-card" data-product="martabak">
+                    <div class="product-icon">
+                        <i class="fas fa-bread-slice"></i>
+                    </div>
+                    <div>Martabak Mini</div>
+                </div>
+                <div class="product-card" data-product="nasi-kucing">
+                    <div class="product-icon">
+                        <i class="fas fa-utensil-spoon"></i>
+                    </div>
+                    <div>Nasi Kucing</div>
+                </div>
+                <div class="product-card" data-product="keripik">
+                    <div class="product-icon">
+                        <i class="fas fa-cookie"></i>
+                    </div>
+                    <div>Keripik</div>
+                </div>
+                <div class="product-card" data-product="kue">
+                    <div class="product-icon">
+                        <i class="fas fa-birthday-cake"></i>
+                    </div>
+                    <div>Kue & Roti</div>
+                </div>
+                <div class="product-card" data-product="minuman">
+                    <div class="product-icon">
+                        <i class="fas fa-coffee"></i>
+                    </div>
+                    <div>Minuman</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-info-circle"></i> Informasi Produk</h2>
+            
+            <div class="form-group">
+                <label for="product-name">Nama Produk</label>
+                <input type="text" id="product-name" placeholder="Contoh: Es Lilin Coklat Premium" value="Produk Saya">
+            </div>
+            
+            <div class="form-group">
+                <label for="product-quantity">Jumlah Produk yang Dihasilkan (pcs)</label>
+                <input type="number" id="product-quantity" min="1" value="150">
+            </div>
+            
+            <div class="form-group">
+                <label for="product-desc">Deskripsi Produk (Opsional)</label>
+                <textarea id="product-desc" rows="2" placeholder="Deskripsi singkat produk..."></textarea>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-shopping-basket"></i> Bahan Baku Utama</h2>
+            <p>Masukkan semua bahan baku utama yang digunakan untuk membuat produk:</p>
+            
+            <div class="table-container">
+                <table id="materials-table">
+                    <thead>
+                        <tr>
+                            <th>Nama Bahan</th>
+                            <th>Jumlah</th>
+                            <th>Satuan</th>
+                            <th>Harga</th>
+                            <th>Pemakaian Efektif (%)</th>
+                            <th>Biaya Efektif</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" class="material-name" placeholder="Tepung terigu" value="Tepung terigu"></td>
+                            <td><input type="number" class="material-qty" min="0" step="0.1" value="2"></td>
+                            <td>
+                                <select class="material-unit">
+                                    <option value="kg">kg</option>
+                                    <option value="gram">gram</option>
+                                    <option value="liter">liter</option>
+                                    <option value="ml">ml</option>
+                                    <option value="pcs">pcs</option>
+                                    <option value="bungkus">bungkus</option>
+                                </select>
+                            </td>
+                            <td><input type="number" class="material-price" min="0" value="15000"></td>
+                            <td><input type="number" class="material-usage" min="0" max="100" value="100">%</td>
+                            <td class="material-cost">Rp 30.000</td>
+                            <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" class="material-name" placeholder="Gula pasir" value="Gula pasir"></td>
+                            <td><input type="number" class="material-qty" min="0" step="0.1" value="1"></td>
+                            <td>
+                                <select class="material-unit">
+                                    <option value="kg">kg</option>
+                                    <option value="gram">gram</option>
+                                    <option value="liter" selected>liter</option>
+                                    <option value="ml">ml</option>
+                                    <option value="pcs">pcs</option>
+                                    <option value="bungkus">bungkus</option>
+                                </select>
+                            </td>
+                            <td><input type="number" class="material-price" min="0" value="12000"></td>
+                            <td><input type="number" class="material-usage" min="0" max="100" value="100">%</td>
+                            <td class="material-cost">Rp 12.000</td>
+                            <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <button id="add-material" class="btn"><i class="fas fa-plus"></i> Tambah Bahan Baku</button>
+        </div>
+        
+        <div class="topping-section">
+            <h2 class="card-title"><i class="fas fa-candy-cane"></i> Topping & Glaze</h2>
+            <p>Masukkan topping, glaze, atau bahan tambahan per pcs:</p>
+            
+            <div class="table-container">
+                <table id="toppings-table">
+                    <thead>
+                        <tr>
+                            <th>Nama Topping/Glaze</th>
+                            <th>Biaya per Pcs</th>
+                            <th>Deskripsi</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" class="topping-name" placeholder="Coklat leleh" value="Coklat leleh"></td>
+                            <td><input type="number" class="topping-cost" min="0" value="500"></td>
+                            <td><input type="text" class="topping-desc" placeholder="Opsional" value="Glaze coklat premium"></td>
+                            <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" class="topping-name" placeholder="Keju parut" value="Keju parut"></td>
+                            <td><input type="number" class="topping-cost" min="0" value="300"></td>
+                            <td><input type="text" class="topping-desc" placeholder="Opsional" value="Topping keju"></td>
+                            <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <button id="add-topping" class="btn btn-topping"><i class="fas fa-plus"></i> Tambah Topping</button>
+        </div>
+        
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-tools"></i> Biaya Lainnya</h2>
+            <p>Masukkan biaya tambahan yang terkait dengan produksi:</p>
+            
+            <div class="table-container">
+                <table id="costs-table">
+                    <thead>
+                        <tr>
+                            <th>Keterangan Biaya</th>
+                            <th>Jumlah</th>
+                            <th>Biaya</th>
+                            <th>Periode</th>
+                            <th>Biaya Efektif</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" class="cost-desc" placeholder="Biaya tenaga kerja" value="Biaya tenaga kerja"></td>
+                            <td><input type="number" class="cost-qty" min="1" value="1"></td>
+                            <td><input type="number" class="cost-amount" min="0" value="50000"></td>
+                            <td>
+                                <select class="cost-period">
+                                    <option value="batch">Per Batch</option>
+                                    <option value="hour">Per Jam</option>
+                                    <option value="day">Per Hari</option>
+                                </select>
+                            </td>
+                            <td class="effective-cost">Rp 50.000</td>
+                            <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" class="cost-desc" placeholder="Biaya kemasan" value="Biaya kemasan"></td>
+                            <td><input type="number" class="cost-qty" min="1" value="150"></td>
+                            <td><input type="number" class="cost-amount" min="0" value="100"></td>
+                            <td>
+                                <select class="cost-period">
+                                    <option value="batch">Per Batch</option>
+                                    <option value="hour">Per Jam</option>
+                                    <option value="day" selected>Per Hari</option>
+                                </select>
+                            </td>
+                            <td class="effective-cost">Rp 15.000</td>
+                            <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <button id="add-cost" class="btn"><i class="fas fa-plus"></i> Tambah Biaya</button>
+        </div>
+        
+        <div class="result-card">
+            <h2 class="card-title"><i class="fas fa-file-invoice-dollar"></i> Hasil Perhitungan HPP</h2>
+            <div class="result-label">HPP per pcs</div>
+            <div class="result-value" id="hpp-result">Rp 1.000</div>
+            <div class="result-label" id="product-summary">Untuk 150 pcs Produk Saya</div>
+            
+            <button id="calculate-btn" class="btn btn-success">
+                <i class="fas fa-calculator"></i> Hitung Ulang HPP
+            </button>
+        </div>
+        
+        <div class="cost-breakdown">
+            <h3>Rincian Biaya Produksi</h3>
+            <div class="cost-item">
+                <span>Total Biaya Bahan Baku:</span>
+                <span id="total-materials">Rp 42.000</span>
+            </div>
+            <div class="cost-item">
+                <span>Total Biaya Topping/Glaze:</span>
+                <span id="total-toppings">Rp 120.000</span>
+            </div>
+            <div class="cost-item">
+                <span>Total Biaya Lainnya:</span>
+                <span id="total-other-costs">Rp 65.000</span>
+            </div>
+            <div class="cost-item total">
+                <span>Total Biaya Produksi:</span>
+                <span id="total-production-cost">Rp 227.000</span>
+            </div>
+        </div>
+        
+        <div class="explanation">
+            <h3><i class="fas fa-lightbulb"></i> Pentingnya Perhitungan HPP untuk UMKM</h3>
+            <p><span class="highlight">Harga Pokok Penjualan (HPP)</span> adalah total biaya yang dikeluarkan untuk menghasilkan suatu produk, termasuk biaya bahan baku, tenaga kerja, dan biaya produksi lainnya.</p>
+            
+            <p><strong>Rumus HPP per pcs:</strong></p>
+            <p style="background: #f0f7ff; padding: 15px; border-radius: 12px; font-weight: 500;">
+                HPP = (Total Biaya Bahan Baku + Total Biaya Topping/Glaze + Total Biaya Lainnya) / Jumlah Produk yang Dihasilkan
+            </p>
+            
+            <p><strong>Manfaat perhitungan HPP yang akurat:</strong></p>
+            <ul style="margin-left: 20px; margin-top: 15px;">
+                <li>Menentukan harga jual yang tepat untuk mendapatkan keuntungan</li>
+                <li>Mengidentifikasi biaya produksi yang dapat dioptimalkan</li>
+                <li>Membantu pengambilan keputusan bisnis yang lebih baik</li>
+                <li>Meningkatkan efisiensi produksi</li>
+                <li>Memantau kesehatan keuangan usaha</li>
+            </ul>
+            
+            <p style="margin-top: 20px;"><strong>Tips untuk UMKM:</strong> Selalu hitung HPP setiap kali ada perubahan harga bahan baku atau penambahan produk baru. Gunakan kalkulator ini untuk mendapatkan hasil yang akurat!</p>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>Kalkulator HPP UMKM Lengkap &copy; 2023 - Alat Akurat untuk Menghitung Biaya Produksi</p>
+        </div>
+    </footer>
+
+    <script>
+        // Fungsi untuk format mata uang
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(angka);
+        }
+        
+        // Fungsi untuk menghitung biaya bahan
+        function calculateMaterialCost(row) {
+            const qty = parseFloat(row.querySelector('.material-qty').value) || 0;
+            const price = parseFloat(row.querySelector('.material-price').value) || 0;
+            const usage = parseFloat(row.querySelector('.material-usage').value) || 100;
+            
+            // Hitung biaya efektif dengan mempertimbangkan pemakaian efektif
+            const effectiveCost = (qty * price) / (usage / 100);
+            row.querySelector('.material-cost').textContent = formatRupiah(effectiveCost);
+            
+            return effectiveCost;
+        }
+        
+        // Fungsi untuk menghitung biaya topping per pcs
+        function calculateToppingCost(row) {
+            const costPerPcs = parseFloat(row.querySelector('.topping-cost').value) || 0;
+            return costPerPcs;
+        }
+        
+        // Fungsi untuk menghitung biaya lainnya
+        function calculateOtherCost(row) {
+            const qty = parseFloat(row.querySelector('.cost-qty').value) || 1;
+            const amount = parseFloat(row.querySelector('.cost-amount').value) || 0;
+            
+            const totalCost = qty * amount;
+            row.querySelector('.effective-cost').textContent = formatRupiah(totalCost);
+            return totalCost;
+        }
+        
+        // Fungsi untuk menghitung total HPP
+        function calculateHPP() {
+            // Hitung total biaya bahan baku
+            let totalMaterialCost = 0;
+            document.querySelectorAll('#materials-table tbody tr').forEach(row => {
+                totalMaterialCost += calculateMaterialCost(row);
+            });
+            
+            // Hitung total biaya topping/glaze
+            let totalToppingCost = 0;
+            const productQty = parseFloat(document.getElementById('product-quantity').value) || 1;
+            
+            document.querySelectorAll('#toppings-table tbody tr').forEach(row => {
+                const toppingPerPcs = calculateToppingCost(row);
+                totalToppingCost += toppingPerPcs * productQty;
+            });
+            
+            // Hitung total biaya lainnya
+            let totalOtherCost = 0;
+            document.querySelectorAll('#costs-table tbody tr').forEach(row => {
+                totalOtherCost += calculateOtherCost(row);
+            });
+            
+            // Hitung HPP per pcs
+            const totalCost = totalMaterialCost + totalToppingCost + totalOtherCost;
+            const hppPerPcs = totalCost / productQty;
+            
+            // Tampilkan hasil
+            document.getElementById('hpp-result').textContent = formatRupiah(hppPerPcs);
+            
+            // Tampilkan ringkasan produk
+            const productName = document.getElementById('product-name').value || 'Produk';
+            document.getElementById('product-summary').textContent = 
+                `Untuk ${productQty} pcs ${productName}`;
+                
+            // Tampilkan rincian biaya
+            document.getElementById('total-materials').textContent = formatRupiah(totalMaterialCost);
+            document.getElementById('total-toppings').textContent = formatRupiah(totalToppingCost);
+            document.getElementById('total-other-costs').textContent = formatRupiah(totalOtherCost);
+            document.getElementById('total-production-cost').textContent = formatRupiah(totalCost);
+        }
+        
+        // Tambah baris bahan baku
+        document.getElementById('add-material').addEventListener('click', function() {
+            const tbody = document.querySelector('#materials-table tbody');
+            const newRow = document.createElement('tr');
+            
+            newRow.innerHTML = `
+                <td><input type="text" class="material-name" placeholder="Nama bahan"></td>
+                <td><input type="number" class="material-qty" min="0" step="0.1" value="1"></td>
+                <td>
+                    <select class="material-unit">
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                        <option value="liter">liter</option>
+                        <option value="ml">ml</option>
+                        <option value="pcs">pcs</option>
+                        <option value="bungkus">bungkus</option>
+                    </select>
+                </td>
+                <td><input type="number" class="material-price" min="0" value="0"></td>
+                <td><input type="number" class="material-usage" min="0" max="100" value="100">%</td>
+                <td class="material-cost">Rp 0</td>
+                <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
+            `;
+            
+            tbody.appendChild(newRow);
+            
+            // Tambahkan event listener untuk input di baris baru
+            addInputListeners(newRow);
+        });
+        
+        // Tambah baris topping/glaze
+        document.getElementById('add-topping').addEventListener('click', function() {
+            const tbody = document.querySelector('#toppings-table tbody');
+            const newRow = document.createElement('tr');
+            
+            newRow.innerHTML = `
+                <td><input type="text" class="topping-name" placeholder="Nama topping"></td>
+                <td><input type="number" class="topping-cost" min="0" value="0"></td>
+                <td><input type="text" class="topping-desc" placeholder="Opsional"></td>
+                <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
+            `;
+            
+            tbody.appendChild(newRow);
+            
+            // Tambahkan event listener untuk input di baris baru
+            addInputListeners(newRow);
+        });
+        
+        // Tambah baris biaya lainnya
+        document.getElementById('add-cost').addEventListener('click', function() {
+            const tbody = document.querySelector('#costs-table tbody');
+            const newRow = document.createElement('tr');
+            
+            newRow.innerHTML = `
+                <td><input type="text" class="cost-desc" placeholder="Keterangan biaya"></td>
+                <td><input type="number" class="cost-qty" min="1" value="1"></td>
+                <td><input type="number" class="cost-amount" min="0" value="0"></td>
+                <td>
+                    <select class="cost-period">
+                        <option value="batch">Per Batch</option>
+                        <option value="hour">Per Jam</option>
+                        <option value="day">Per Hari</option>
+                    </select>
+                </td>
+                <td class="effective-cost">Rp 0</td>
+                <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
+            `;
+            
+            tbody.appendChild(newRow);
+            
+            // Tambahkan event listener untuk input di baris baru
+            addInputListeners(newRow);
+        });
+        
+        // Fungsi untuk menambahkan event listener ke input
+        function addInputListeners(row) {
+            // Untuk bahan baku
+            const materialQty = row.querySelector('.material-qty');
+            const materialPrice = row.querySelector('.material-price');
+            const materialUsage = row.querySelector('.material-usage');
+            
+            if (materialQty) {
+                materialQty.addEventListener('input', () => {
+                    calculateMaterialCost(row);
+                    calculateHPP();
+                });
+            }
+            if (materialPrice) {
+                materialPrice.addEventListener('input', () => {
+                    calculateMaterialCost(row);
+                    calculateHPP();
+                });
+            }
+            if (materialUsage) {
+                materialUsage.addEventListener('input', () => {
+                    calculateMaterialCost(row);
+                    calculateHPP();
+                });
+            }
+            
+            // Untuk topping
+            const toppingCost = row.querySelector('.topping-cost');
+            if (toppingCost) {
+                toppingCost.addEventListener('input', calculateHPP);
+            }
+            
+            // Untuk biaya lainnya
+            const costQty = row.querySelector('.cost-qty');
+            const costAmount = row.querySelector('.cost-amount');
+            
+            if (costQty) {
+                costQty.addEventListener('input', () => {
+                    calculateOtherCost(row);
+                    calculateHPP();
+                });
+            }
+            if (costAmount) {
+                costAmount.addEventListener('input', () => {
+                    calculateOtherCost(row);
+                    calculateHPP();
+                });
+            }
+        }
+        
+        // Event delegation untuk menghapus baris
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.remove-row')) {
+                const row = e.target.closest('tr');
+                if (row && row.parentNode.querySelectorAll('tr').length > 1) {
+                    row.remove();
+                    calculateHPP();
+                }
+            }
+        });
+        
+        // Event listener untuk tombol hitung
+        document.getElementById('calculate-btn').addEventListener('click', calculateHPP);
+        
+        // Event listener untuk input yang mempengaruhi perhitungan
+        document.getElementById('product-quantity').addEventListener('input', calculateHPP);
+        document.getElementById('product-name').addEventListener('input', calculateHPP);
+        
+        // Pilih produk UMKM
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.product-card').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                
+                const product = this.getAttribute('data-product');
+                // Di sini bisa ditambahkan logika untuk mengisi form otomatis berdasarkan produk
+                switch(product) {
+                    case 'es-lilin':
+                        document.getElementById('product-name').value = 'Es Lilin Premium';
+                        break;
+                    case 'donat':
+                        document.getElementById('product-name').value = 'Donat Jumbo';
+                        break;
+                    case 'martabak':
+                        document.getElementById('product-name').value = 'Martabak Mini';
+                        break;
+                    case 'nasi-kucing':
+                        document.getElementById('product-name').value = 'Nasi Kucing Special';
+                        break;
+                    case 'keripik':
+                        document.getElementById('product-name').value = 'Keripik Singkong Pedas';
+                        break;
+                    case 'kue':
+                        document.getElementById('product-name').value = 'Kue Brownies';
+                        break;
+                    case 'minuman':
+                        document.getElementById('product-name').value = 'Minuman Segar';
+                        break;
+                    default:
+                        document.getElementById('product-name').value = 'Produk Saya';
+                }
+                calculateHPP();
+            });
+        });
+        
+        // Inisialisasi event listener untuk baris awal
+        document.querySelectorAll('table tbody tr').forEach(row => {
+            addInputListeners(row);
+        });
+        
+        // Hitung HPP awal
+        calculateHPP();
+    </script>
+</body>
+</html>
