@@ -23,6 +23,7 @@
             --sale-normal: #f9c74f;
             --sale-bad: #f94144;
             --save: #2a9d8f;
+            --export: #f77f00;
         }
         
         * {
@@ -253,6 +254,14 @@
             background: linear-gradient(135deg, #1a936f, #0d6e54);
         }
         
+        .btn-export {
+            background: linear-gradient(135deg, var(--export), #fcbf49);
+        }
+        
+        .btn-export:hover {
+            background: linear-gradient(135deg, #fcbf49, #f77f00);
+        }
+        
         .table-container {
             overflow-x: auto;
             border-radius: 12px;
@@ -332,8 +341,14 @@
         .save-section {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
             margin-top: 30px;
+        }
+        
+        .save-section .btn {
+            flex: 1;
+            min-width: 200px;
         }
         
         .explanation {
@@ -563,14 +578,114 @@
             opacity: 1;
         }
         
-        @media (max-width: 768px) {
-            .save-section {
-                flex-direction: column;
-                gap: 15px;
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: modalAppear 0.4s ease;
+        }
+        
+        @keyframes modalAppear {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
             }
-            
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #6c757d;
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: var(--danger);
+        }
+        
+        .modal-body {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+        
+        .import-area {
+            border: 2px dashed #4361ee;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            background: #f0f7ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .import-area:hover {
+            background: #e2e9ff;
+            transform: translateY(-3px);
+        }
+        
+        .import-icon {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .file-name {
+            margin-top: 15px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
             .save-section .btn {
-                width: 100%;
+                min-width: 100%;
             }
             
             .product-grid {
@@ -601,6 +716,11 @@
             
             .sale-status {
                 font-size: 1.5rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
             }
         }
     </style>
@@ -946,6 +1066,12 @@
             <button id="load-data" class="btn">
                 <i class="fas fa-folder-open"></i> Muat Data
             </button>
+            <button id="export-data" class="btn btn-export">
+                <i class="fas fa-file-export"></i> Export Data
+            </button>
+            <button id="import-btn" class="btn">
+                <i class="fas fa-file-import"></i> Import Data
+            </button>
             <button id="reset-data" class="btn btn-danger">
                 <i class="fas fa-trash-alt"></i> Reset Data
             </button>
@@ -955,11 +1081,60 @@
             <i class="fas fa-check-circle"></i>
             <span>Data berhasil disimpan!</span>
         </div>
+        
+        <!-- Modal untuk notifikasi -->
+        <div class="modal" id="notification-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modal-title">Notifikasi</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    Operasi berhasil dilakukan!
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success close-modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal untuk import data -->
+        <div class="modal" id="import-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Import Data</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Pilih file data HPP (.json) untuk diimpor:</p>
+                    
+                    <div class="import-area" id="drop-area">
+                        <div class="import-icon">
+                            <i class="fas fa-file-import"></i>
+                        </div>
+                        <h3>Seret & Jatuhkan File di Sini</h3>
+                        <p>atau</p>
+                        <button class="btn btn-primary" id="select-file-btn">
+                            <i class="fas fa-folder-open"></i> Pilih File
+                        </button>
+                        <div class="file-name" id="file-name">Belum ada file dipilih</div>
+                    </div>
+                    
+                    <input type="file" id="file-input" accept=".json" style="display: none;">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn close-modal">Batal</button>
+                    <button class="btn btn-success" id="confirm-import" disabled>
+                        <i class="fas fa-check"></i> Import Data
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
     
     <footer>
         <div class="container">
-            <p>Kalkulator HPP UMKM &copy; 2025 - Alat Akurat untuk Menghitung Biaya Produksi</p>
+            <p>Kalkulator HPP UMKM Presisi &copy; 2023 - Alat Akurat untuk Menghitung Biaya Produksi</p>
         </div>
     </footer>
 
@@ -1140,8 +1315,8 @@
             }
         }
         
-        // Fungsi untuk menyimpan data
-        function saveData() {
+        // Fungsi untuk mengumpulkan semua data
+        function gatherData() {
             const data = {
                 productInfo: {
                     name: document.getElementById('product-name').value,
@@ -1154,7 +1329,8 @@
                 saleAnalysis: {
                     sellingPrice: document.getElementById('selling-price').value,
                     soldQuantity: document.getElementById('sold-quantity').value
-                }
+                },
+                timestamp: new Date().toISOString()
             };
             
             // Kumpulkan data bahan baku
@@ -1199,7 +1375,12 @@
                 });
             });
             
-            // Simpan ke localStorage
+            return data;
+        }
+        
+        // Fungsi untuk menyimpan data ke localStorage
+        function saveData() {
+            const data = gatherData();
             localStorage.setItem('hppCalculatorData', JSON.stringify(data));
             
             // Tampilkan notifikasi
@@ -1212,15 +1393,27 @@
             }, 3000);
         }
         
-        // Fungsi untuk memuat data
+        // Fungsi untuk memuat data dari localStorage
         function loadData() {
             const savedData = localStorage.getItem('hppCalculatorData');
             if (!savedData) {
-                alert('Tidak ada data tersimpan.');
+                showNotification('Tidak ada data tersimpan.', 'error');
                 return;
             }
-            const data = JSON.parse(savedData);
             
+            try {
+                const data = JSON.parse(savedData);
+                loadDataFromObject(data);
+                showNotification('Data berhasil dimuat dari penyimpanan lokal!', 'success');
+                calculateHPP();
+                analyzeSale();
+            } catch (e) {
+                showNotification('Gagal memuat data: Format tidak valid.', 'error');
+            }
+        }
+        
+        // Fungsi untuk mengisi data dari objek
+        function loadDataFromObject(data) {
             // Isi informasi produk
             document.getElementById('product-name').value = data.productInfo.name || '';
             document.getElementById('product-quantity').value = data.productInfo.quantity || '';
@@ -1231,11 +1424,11 @@
             data.materials.forEach(material => {
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
-                    <td><input type="text" class="material-name" placeholder="Nama bahan" value="${material.name}"></td>
-                    <td><input type="number" class="material-price" min="0" value="${material.price}"></td>
-                    <td><input type="number" class="material-content" min="0" step="0.01" value="${material.content}"></td>
-                    <td><input type="text" class="material-unit" placeholder="Satuan" value="${material.unit}"></td>
-                    <td><input type="number" class="material-qty-used" min="0" step="0.01" value="${material.qtyUsed}"></td>
+                    <td><input type="text" class="material-name" placeholder="Nama bahan" value="${material.name || ''}"></td>
+                    <td><input type="number" class="material-price" min="0" value="${material.price || 0}"></td>
+                    <td><input type="number" class="material-content" min="0" step="0.01" value="${material.content || 0}"></td>
+                    <td><input type="text" class="material-unit" placeholder="Satuan" value="${material.unit || ''}"></td>
+                    <td><input type="number" class="material-qty-used" min="0" step="0.01" value="${material.qtyUsed || 0}"></td>
                     <td class="unit-price">Rp 0/unit</td>
                     <td class="material-cost">Rp 0</td>
                     <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
@@ -1251,11 +1444,11 @@
             data.toppings.forEach(topping => {
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
-                    <td><input type="text" class="topping-name" placeholder="Nama topping" value="${topping.name}"></td>
-                    <td><input type="number" class="topping-price" min="0" value="${topping.price}"></td>
-                    <td><input type="number" class="topping-content" min="0" step="0.01" value="${topping.content}"></td>
-                    <td><input type="text" class="topping-unit" placeholder="Satuan" value="${topping.unit}"></td>
-                    <td><input type="number" class="topping-qty-used" min="0" step="0.01" value="${topping.qtyUsed}"></td>
+                    <td><input type="text" class="topping-name" placeholder="Nama topping" value="${topping.name || ''}"></td>
+                    <td><input type="number" class="topping-price" min="0" value="${topping.price || 0}"></td>
+                    <td><input type="number" class="topping-content" min="0" step="0.01" value="${topping.content || 0}"></td>
+                    <td><input type="text" class="topping-unit" placeholder="Satuan" value="${topping.unit || ''}"></td>
+                    <td><input type="number" class="topping-qty-used" min="0" step="0.01" value="${topping.qtyUsed || 0}"></td>
                     <td class="unit-price">Rp 0/unit</td>
                     <td class="topping-cost">Rp 0</td>
                     <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
@@ -1279,7 +1472,7 @@
                             <option value="lainnya" ${energy.type === 'lainnya' ? 'selected' : ''}>Lainnya</option>
                         </select>
                     </td>
-                    <td><input type="number" class="energy-price" min="0" value="${energy.price}"></td>
+                    <td><input type="number" class="energy-price" min="0" value="${energy.price || 0}"></td>
                     <td>
                         <select class="energy-unit">
                             <option value="kwh" ${energy.unit === 'kwh' ? 'selected' : ''}>kWh</option>
@@ -1287,7 +1480,7 @@
                             <option value="tabung" ${energy.unit === 'tabung' ? 'selected' : ''}>Tabung</option>
                         </select>
                     </td>
-                    <td><input type="number" class="energy-usage" min="0" step="0.01" value="${energy.usage}"></td>
+                    <td><input type="number" class="energy-usage" min="0" step="0.01" value="${energy.usage || 0}"></td>
                     <td class="energy-cost">Rp 0</td>
                     <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
                 `;
@@ -1302,9 +1495,9 @@
             data.otherCosts.forEach(cost => {
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
-                    <td><input type="text" class="cost-desc" placeholder="Keterangan biaya" value="${cost.desc}"></td>
-                    <td><input type="number" class="cost-qty" min="1" value="${cost.qty}"></td>
-                    <td><input type="number" class="cost-amount" min="0" value="${cost.amount}"></td>
+                    <td><input type="text" class="cost-desc" placeholder="Keterangan biaya" value="${cost.desc || ''}"></td>
+                    <td><input type="number" class="cost-qty" min="1" value="${cost.qty || 1}"></td>
+                    <td><input type="number" class="cost-amount" min="0" value="${cost.amount || 0}"></td>
                     <td>
                         <select class="cost-period">
                             <option value="batch" ${cost.period === 'batch' ? 'selected' : ''}>Per Batch</option>
@@ -1323,12 +1516,6 @@
             // Isi analisis penjualan
             document.getElementById('selling-price').value = data.saleAnalysis.sellingPrice || '';
             document.getElementById('sold-quantity').value = data.saleAnalysis.soldQuantity || '';
-            
-            // Hitung ulang semua
-            calculateHPP();
-            analyzeSale();
-            
-            alert('Data berhasil dimuat!');
         }
         
         // Fungsi untuk reset data
@@ -1339,15 +1526,17 @@
                 // Reset form
                 document.getElementById('product-name').value = 'Produk Saya';
                 document.getElementById('product-quantity').value = '100';
+                document.getElementById('selling-price').value = '';
+                document.getElementById('sold-quantity').value = '';
                 
                 // Reset tabel bahan baku
                 const materialsTbody = document.querySelector('#materials-table tbody');
                 materialsTbody.innerHTML = `
                     <tr>
-                        <td><input type="text" class="material-name" placeholder="Nama bahan" value=""></td>
+                        <td><input type="text" class="material-name" placeholder="Nama bahan"></td>
                         <td><input type="number" class="material-price" min="0" value="0"></td>
                         <td><input type="number" class="material-content" min="0" step="0.01" value="0"></td>
-                        <td><input type="text" class="material-unit" placeholder="Satuan" value=""></td>
+                        <td><input type="text" class="material-unit" placeholder="Satuan"></td>
                         <td><input type="number" class="material-qty-used" min="0" step="0.01" value="0"></td>
                         <td class="unit-price">Rp 0/unit</td>
                         <td class="material-cost">Rp 0</td>
@@ -1361,134 +1550,85 @@
                 calculateHPP();
                 analyzeSale();
                 
-                alert('Data berhasil direset!');
+                showNotification('Data berhasil direset!', 'success');
             }
         }
         
-        // Tambah baris bahan baku
-        document.getElementById('add-material').addEventListener('click', function() {
-            const tbody = document.querySelector('#materials-table tbody');
-            const newRow = document.createElement('tr');
+        // Fungsi untuk menampilkan notifikasi modal
+        function showNotification(message, type = 'success') {
+            const modal = document.getElementById('notification-modal');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
             
-            newRow.innerHTML = `
-                <td><input type="text" class="material-name" placeholder="Nama bahan"></td>
-                <td><input type="number" class="material-price" min="0" value="0"></td>
-                <td><input type="number" class="material-content" min="0" step="0.01" value="0"></td>
-                <td><input type="text" class="material-unit" placeholder="Satuan"></td>
-                <td><input type="number" class="material-qty-used" min="0" step="0.01" value="0"></td>
-                <td class="unit-price">Rp 0/unit</td>
-                <td class="material-cost">Rp 0</td>
-                <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
-            `;
+            title.textContent = type === 'success' ? 'Sukses!' : 'Error';
+            body.textContent = message;
             
-            tbody.appendChild(newRow);
-            addInputListeners(newRow);
-        });
+            if (type === 'success') {
+                title.style.color = '#2a9d8f';
+            } else {
+                title.style.color = '#e63946';
+            }
+            
+            modal.style.display = 'block';
+        }
         
-        // Tambah baris topping/glaze
-        document.getElementById('add-topping').addEventListener('click', function() {
-            const tbody = document.querySelector('#toppings-table tbody');
-            const newRow = document.createElement('tr');
+        // Fungsi untuk export data ke file JSON
+        function exportData() {
+            const data = gatherData();
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
             
-            newRow.innerHTML = `
-                <td><input type="text" class="topping-name" placeholder="Nama topping"></td>
-                <td><input type="number" class="topping-price" min="0" value="0"></td>
-                <td><input type="number" class="topping-content" min="0" step="0.01" value="0"></td>
-                <td><input type="text" class="topping-unit" placeholder="Satuan"></td>
-                <td><input type="number" class="topping-qty-used" min="0" step="0.01" value="0"></td>
-                <td class="unit-price">Rp 0/unit</td>
-                <td class="topping-cost">Rp 0</td>
-                <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
-            `;
+            // Buat URL untuk blob
+            const url = URL.createObjectURL(dataBlob);
             
-            tbody.appendChild(newRow);
-            addInputListeners(newRow);
-        });
+            // Buat elemen <a> untuk download
+            const a = document.createElement('a');
+            a.href = url;
+            
+            // Format nama file
+            const date = new Date();
+            const dateStr = `${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+            a.download = `hpp-data-${dateStr}.json`;
+            
+            // Klik otomatis untuk download
+            document.body.appendChild(a);
+            a.click();
+            
+            // Bersihkan
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+            
+            // Tampilkan notifikasi
+            showNotification('Data berhasil diekspor! File telah disimpan di perangkat Anda.', 'success');
+        }
         
-        // Tambah baris energi
-        document.getElementById('add-energy').addEventListener('click', function() {
-            const tbody = document.querySelector('#energy-table tbody');
-            const newRow = document.createElement('tr');
+        // Fungsi untuk import data dari file JSON
+        function importData(file) {
+            const reader = new FileReader();
             
-            newRow.innerHTML = `
-                <td>
-                    <select class="energy-type">
-                        <option value="listrik">Listrik</option>
-                        <option value="gas">Gas</option>
-                        <option value="jasa">Jasa</option>
-                        <option value="lainnya">Lainnya</option>
-                    </select>
-                </td>
-                <td><input type="number" class="energy-price" min="0" value="0"></td>
-                <td>
-                    <select class="energy-unit">
-                        <option value="kwh">kWh</option>
-                        <option value="jam">Jam</option>
-                        <option value="tabung">Tabung</option>
-                    </select>
-                </td>
-                <td><input type="number" class="energy-usage" min="0" step="0.01" value="0"></td>
-                <td class="energy-cost">Rp 0</td>
-                <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
-            `;
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    loadDataFromObject(data);
+                    calculateHPP();
+                    analyzeSale();
+                    
+                    // Tampilkan nama file
+                    document.getElementById('file-name').textContent = file.name;
+                    
+                    // Aktifkan tombol konfirmasi
+                    document.getElementById('confirm-import').disabled = false;
+                } catch (e) {
+                    document.getElementById('file-name').textContent = 'File tidak valid!';
+                    document.getElementById('confirm-import').disabled = true;
+                    console.error('Error parsing JSON:', e);
+                }
+            };
             
-            tbody.appendChild(newRow);
-            addInputListeners(newRow);
-        });
-        
-        // Tambah baris biaya lainnya
-        document.getElementById('add-cost').addEventListener('click', function() {
-            const tbody = document.querySelector('#costs-table tbody');
-            const newRow = document.createElement('tr');
-            
-            newRow.innerHTML = `
-                <td><input type="text" class="cost-desc" placeholder="Keterangan biaya"></td>
-                <td><input type="number" class="cost-qty" min="1" value="1"></td>
-                <td><input type="number" class="cost-amount" min="0" value="0"></td>
-                <td>
-                    <select class="cost-period">
-                        <option value="batch">Per Batch</option>
-                        <option value="hour">Per Jam</option>
-                        <option value="day">Per Hari</option>
-                    </select>
-                </td>
-                <td class="effective-cost">Rp 0</td>
-                <td><button class="action-btn remove-row"><i class="fas fa-trash"></i></button></td>
-            `;
-            
-            tbody.appendChild(newRow);
-            addInputListeners(newRow);
-        });
-        
-        // Tambah log pembelian
-        document.getElementById('add-log').addEventListener('click', function() {
-            const logContainer = document.querySelector('.purchase-log');
-            const logItem = document.createElement('div');
-            logItem.className = 'log-item';
-            
-            // Tanggal sekarang
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('id-ID', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric'
-            });
-            
-            logItem.innerHTML = `
-                <div class="log-date">${dateStr}</div>
-                <div class="log-detail">
-                    <div>Pembelian Baru</div>
-                    <div class="calculation-detail">Harga: Rp 0 → Rp 0/unit | Terpakai: 0 unit (Rp 0)</div>
-                </div>
-                <div class="log-cost">Rp 0</div>
-                <div class="log-actions">
-                    <button title="Edit"><i class="fas fa-edit"></i></button>
-                    <button title="Hapus"><i class="fas fa-trash"></i></button>
-                </div>
-            `;
-            
-            logContainer.insertBefore(logItem, document.getElementById('add-log'));
-        });
+            reader.readAsText(file);
+        }
         
         // Fungsi untuk menambahkan event listener ke input
         function addInputListeners(row) {
@@ -1546,6 +1686,13 @@
                     calculateHPP();
                 }
             }
+            
+            // Tutup modal saat klik tombol close
+            if (e.target.closest('.close-modal')) {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            }
         });
         
         // Event listener untuk tombol hitung
@@ -1554,14 +1701,76 @@
         // Event listener untuk analisis penjualan
         document.getElementById('analyze-sale').addEventListener('click', analyzeSale);
         
-        // Event listener untuk input yang mempengaruhi perhitungan
-        document.getElementById('product-quantity').addEventListener('input', calculateHPP);
-        document.getElementById('product-name').addEventListener('input', calculateHPP);
-        
         // Event listener untuk tombol simpan dan muat
         document.getElementById('save-data').addEventListener('click', saveData);
         document.getElementById('load-data').addEventListener('click', loadData);
+        document.getElementById('export-data').addEventListener('click', exportData);
         document.getElementById('reset-data').addEventListener('click', resetData);
+        
+        // Event listener untuk tombol import
+        document.getElementById('import-btn').addEventListener('click', function() {
+            document.getElementById('import-modal').style.display = 'block';
+            document.getElementById('file-name').textContent = 'Belum ada file dipilih';
+            document.getElementById('confirm-import').disabled = true;
+        });
+        
+        // Event listener untuk pilih file
+        document.getElementById('select-file-btn').addEventListener('click', function() {
+            document.getElementById('file-input').click();
+        });
+        
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                importData(e.target.files[0]);
+            }
+        });
+        
+        // Event listener untuk konfirmasi import
+        document.getElementById('confirm-import').addEventListener('click', function() {
+            document.getElementById('import-modal').style.display = 'none';
+            showNotification('Data berhasil diimpor!', 'success');
+        });
+        
+        // Event listener untuk drag and drop
+        const dropArea = document.getElementById('drop-area');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            dropArea.style.backgroundColor = '#e2e9ff';
+            dropArea.style.borderColor = '#4361ee';
+        }
+        
+        function unhighlight() {
+            dropArea.style.backgroundColor = '#f0f7ff';
+            dropArea.style.borderColor = '#4361ee';
+        }
+        
+        dropArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                importData(files[0]);
+            }
+        }
         
         // Inisialisasi event listener untuk baris awal
         document.querySelectorAll('table tbody tr').forEach(row => {
